@@ -2,12 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntP
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadImageService } from 'src/upload-image/upload-image.service';
+import { JwtRolesGuard } from 'src/auth/jwt/jwt-roles.guard';
+import { HasRoles } from 'src/auth/jwt/has-roles';
+import { JwtRole } from 'src/auth/jwt/jwt-role';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, JwtRolesGuard)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -20,6 +23,7 @@ export class UsersController {
   }
 
   @Get()
+  @HasRoles(JwtRole.ADMIN)
   findAll() {
     return this.usersService.findAll();
   }
@@ -40,6 +44,7 @@ export class UsersController {
   }
 
   @Post(':id/upload')
+  @HasRoles(JwtRole.ADMIN, JwtRole.CLIENT)
   @UseInterceptors(FileInterceptor('image'))
   async updateWithImage(
     @Param('id', ParseIntPipe) id: string,

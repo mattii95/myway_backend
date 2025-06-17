@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { UploadImageModule } from './upload-image/upload-image.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UploadImageModule } from './upload-image/upload-image.module';
     UsersModule,
     AuthModule,
     UploadImageModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

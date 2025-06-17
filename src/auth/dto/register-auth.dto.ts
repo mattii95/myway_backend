@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from "class-validator";
+import { Role } from "src/roles/interfaces/role.interface";
 
 export class RegisterAuthDto {
 
@@ -24,4 +25,8 @@ export class RegisterAuthDto {
   @MinLength(6, { message: 'La contraseña debe tener minimo 6 caracteres' })
   password: string;
 
+  @ArrayNotEmpty()
+  @IsArray()
+  @IsEnum(Role, { each: true })
+  rolesTypes: Role[];
 }
